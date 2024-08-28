@@ -1,0 +1,34 @@
+const { generatePassword } = require('./passwordGenerator'); // Adjust the path as necessary
+
+describe('generatePassword', () => {
+    test('should generate a password of the correct length', () => {
+        const length = 12;
+        const password = generatePassword(length, 'low');
+        expect(password).toHaveLength(length);
+    });
+
+    test('should generate a low strength password with only lowercase letters', () => {
+        const password = generatePassword(10, 'low');
+        const lowerChars = /^[a-z]+$/;
+
+        expect(password).toMatch(lowerChars);
+    });
+
+    test('should generate a medium strength password with uppercase, lowercase, and numbers', () => {
+        const password = generatePassword(15, 'medium');
+        const mediumChars = /^[a-zA-Z0-9]+$/;
+
+        expect(password).toMatch(mediumChars);
+    });
+
+    test('should generate a high strength password with uppercase, lowercase, numbers, and symbols', () => {
+        const password = generatePassword(20, 'high');
+        const highChars = /^[a-zA-Z0-9!@#$%^&*()_+\[\]{}|;:,.<>?]+$/;
+
+        expect(password).toMatch(highChars);
+    });
+
+    test('should throw an error for invalid strength levels', () => {
+        expect(() => generatePassword(10, 'invalid')).toThrow('Invalid strength level. Use \'low\', \'medium\', or \'high\'.');
+    });
+})
